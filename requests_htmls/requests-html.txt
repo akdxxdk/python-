@@ -1,0 +1,97 @@
+学习网络爬虫能够分三步走
+
+第一步，刚触摸Python网络爬虫的时候肯定是先过一遍Python最基本的常识，比如说：变量、字符串、列表、字典、元组、操控句子、语法等，把根底打牢，这样在做案例的时候不会觉得模糊。此外，你还需求了解一些网络恳求的基本原理、网页结构（如HTML、XML）等。
+
+第二步，看视频或许找一本专业的网络爬虫书本，跟着他人的爬虫代码学，跟着他人的代码敲，弄懂每一行代码，留意务必要着手亲身实践，这样才会学的更快，懂的更多。许多时候我们好大喜功，觉得自己这个会，然后不愿意着手，其实真实比及我们着手的时候便漏洞百出了，最好每天都坚持敲代码，找点感觉。在该阶段，也需求了解干流的爬虫东西和库，如urllib、requests、re、bs4、xpath、json等，一些常用的爬虫结构如scrapy等是必需求把握的，这个结构仍是蛮简略的，可能初学者觉得它很难抵挡，可是当抓取的数据量非常大的时候，你就会明白的。
+
+第三步，你现已具有了爬虫思想了，是时候自己着手，锦衣玉食了，你能够独立设计爬虫体系，多找一些网站做操练。静态网页和动态网页的抓取战略和办法需求把握，了解JS加载的网页，了解selenium+PhantomJS模仿浏览器，知道json格局的数据该怎样处理。网页如果是POST恳求，你应该知道要传入data参数，而且这种网页一般是动态加载的，需求把握抓包办法。如果想进步爬虫功率，就得考虑是运用多线程，多进程仍是协程，仍是分布式操作。
+
+小白沿着这三步走就现已很好了，其实网络爬虫的道路远不止这些，当你学完这些，你会发现一山还有一山高。之后你能够会碰到爬虫结构的运用、数据库、涉及到大规模爬虫，还需求了解分布式的概念、音讯行列、增量式爬取、常用的数据结构和算法、缓存，乃至还包括机器学习、数据发掘和剖析的使用。
+
+作者：小猿圈IT教育
+链接：https://www.jianshu.com/p/fde92424ab9c
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+一、安装
+'''python
+!pip install requests-html
+'''
+
+二、基本使用
+获取网页
+
+'''python
+from requests_html import HTMLSession
+
+session = HTMLSession()
+r = session.get('https://www.qiushibaike.com/text/')
+// 查看页面内容
+print(r.html.html)
+'''
+获取链接
+links和absolute_links两个属性分别返回HTML对象所包含的所有链接和绝对链接（均不包含锚点）。
+
+'''python
+# 获取链接
+print(r.html.links)
+print(r.html.absolute_links)
+'''
+
+获取元素
+request-html支持CSS选择器和XPATH两种语法来选取HTML元素。首先先来看看CSS选择器语法，它需要使用HTML的find函数，该函数有5个参数，作用如下：
+
+1.selector，要用的CSS选择器；
+2.clean，布尔值，如果为真会忽略HTML中style和script标签造成的影响（原文是sanitize，大概这么理解）;
+3.containing，如果设置该属性，会返回包含该属性文本的标签；
+4.first，布尔值，如果为真会返回第一个元素，否则会返回满足条件的元素列表；
+5._encoding，编码格式。
+
+例子：
+
+'''python
+# 首页菜单文本
+print(r.html.find('div#menu', first=True).text)
+# 首页菜单元素
+print(r.html.find('div#menu a'))
+# 段子内容
+print(list(map(lambda x: x.text, r.html.find('div.content span'))))
+'''
+
+XPAT语法，需要另一个函数xpath的支持，它有4个参数：
+
+1.selector，要用的XPATH选择器；
+2.clean，布尔值，如果为真会忽略HTML中style和script标签造成的影响（原文是sanitize，大概这么理解）;
+3.first，布尔值，如果为真会返回第一个元素，否则会返回满足条件的元素列表；
+4._encoding，编码格式。
+
+还是上面的例子，不过这次使用XPATH语法：
+
+'''python
+print(r.html.xpath("//div[@id='menu']", first=True).text)
+print(r.html.xpath("//div[@id='menu']/a"))
+print(r.html.xpath("//div[@class='content']/span/text()"))
+'''
+输出和上面那个几乎一样，之所以说是“几乎”，因为第三个输出会多出几个换行符，不知道什么原因。需要注意的一点是如果XPATH中包含text()或@href这样的子属性，那么结果相应的会变成简单的字符串类型，而不是HTML元素。
+
+元素内容
+糗事百科首页LOGO的HTML代码如下所示：
+
+'''HTML5
+<div class="logo" id="hd_logo">
+<a href="/"><h1>糗事百科</h1></a>
+</div>
+'''
+我们来选取这个元素：
+'''python
+e = r.html.find("div#hd_logo", first=True)
+'''
+要获取元素的文本内容，用text属性：
+'''python
+print(e.text)
+# 糗事百科
+'''
+要获取元素的attribute，用attr属性：
+'''python
+print(e.attrs)
+'''
