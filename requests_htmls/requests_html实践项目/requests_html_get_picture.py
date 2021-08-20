@@ -28,8 +28,8 @@ class download():
         r = requests.get(self.url, stream=True, headers=headers)
         print(r)
         length = float(r.headers['content-length'])
-        # path = os.path.abspath(os.path.dirname(__file__))
-        desktop_path = os.path.join(os.path.expanduser('~'),"Desktop")
+        # path = os.path.abspath(os.path.dirname(__file__))#保存到本文件相同目录下
+        desktop_path = os.path.join(os.path.expanduser('~'),"Desktop")#保存到桌面
         names = desktop_path+"//"+self.name
         f = open(names, 'wb')
         count = 0
@@ -52,7 +52,7 @@ class download():
 
 class DouBanTest:
     def __init__(self,url):
-        self.start_url = url  # 豆瓣电影排行榜url
+        self.start_url = url  # 实例化URL
         self.session = HTMLSession()  # 实例化session
         self.aSession = AsyncHTMLSession()  # 实例化异步session
         users = {# 可以在发送请求的时候更换user-agent
@@ -147,7 +147,7 @@ class DouBanTest:
 
 
 if __name__ == '__main__':
-    # url = 'https://cn.bing.com/images/search?q=%e6%9c%ac%e5%85%ae%e5%9b%be%e7%89%87%e5%a3%81%e7%ba%b8%e9%ab%98%e6%b8%85&qpvt=%e6%9c%ac%e5%85%ae%e5%9b%be%e7%89%87%e5%a3%81%e7%ba%b8%e9%ab%98%e6%b8%85&form=IGRE&first=1&tsc=ImageBasicHover'
-    url = 'https://cn.bing.com/images/search?q=%e6%9c%ac%e5%85%ae%e5%9b%be%e7%89%87%e5%a3%81%e7%ba%b8%e9%ab%98%e6%b8%85&qpvt=%e6%9c%ac%e5%85%ae%e5%9b%be%e7%89%87%e5%a3%81%e7%ba%b8%e9%ab%98%e6%b8%85&form=HDRSC2&first=1&tsc=ImageBasicHover'
+    url_name = input("请输入要搜索的图片名称：")
+    url = 'https://cn.bing.com/images/search?q='+url_name+'&form=HDRSC2&first=1&tsc=ImageBasicHover'
     test = DouBanTest(url)
     test.get_data()

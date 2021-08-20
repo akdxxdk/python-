@@ -52,7 +52,7 @@ class download():
 
 class DouBanTest:
     def __init__(self,url):
-        self.start_url = url
+        self.start_url = url    #实例化URL
         self.session = HTMLSession()  # 实例化session
         self.aSession = AsyncHTMLSession()  # 实例化异步session
         users = {# 可以在发送请求的时候更换user-agent

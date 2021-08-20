@@ -5,7 +5,7 @@ from pprint import pprint
 
 class DouBanTest:
     def __init__(self,url):
-        self.start_url = url  # 豆瓣电影排行榜url
+        self.start_url = url  # 实例化url
         self.session = HTMLSession()  # 实例化session
         self.aSession = AsyncHTMLSession()  # 实例化异步session
         users = {# 可以在发送请求的时候更换user-agent
